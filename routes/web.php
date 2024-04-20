@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\TestMail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TasksController;
@@ -32,3 +33,11 @@ Route::post('/register',[AuthController::class, 'register']);
 Route::get('/login',[AuthController::class, 'loginForm'])->name ('login')-> middleware('guest');
 Route::post('/login',[AuthController::class, 'login']);
 Route::post('/logout',[AuthController::class, 'logout']);
+
+Route::get('/test_mail', function () {
+    $name = 'Test';
+    $age = 10;
+
+    Mail::to('test@test.com')->send(new TestMail ($name, $age));
+    return 'email sent';
+});
