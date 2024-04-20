@@ -19,7 +19,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/tasks', [TasksController::class, 'index']);
+Route::get('/tasks', [TasksController::class, 'index'])->middleware('auth');
 Route::get('/tasks/create', [TasksController::class, 'create']);
 Route::post('/tasks', [TasksController::class, 'store']);
 Route::get('/tasks/{task}', [TasksController::class, 'show']);
@@ -27,8 +27,8 @@ Route::get('/tasks/{task}/edit', [TasksController::class, 'edit']);
 Route::put('/tasks/{task}', [TasksController::class, 'update']);
 Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
 
-Route::get('/register',[AuthController::class, 'registerForm']);
+Route::get('/register',[AuthController::class, 'registerForm'])->middleware('guest');
 Route::post('/register',[AuthController::class, 'register']);
-Route::get('/login',[AuthController::class, 'loginForm']);
+Route::get('/login',[AuthController::class, 'loginForm'])->name ('login')-> middleware('guest');
 Route::post('/login',[AuthController::class, 'login']);
 Route::post('/logout',[AuthController::class, 'logout']);

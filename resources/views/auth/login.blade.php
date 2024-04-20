@@ -19,6 +19,12 @@
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="remember" name="remember">
+                <label class="form-check-label" for="remember">
+                    Remember me
+                </label>
+            </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
