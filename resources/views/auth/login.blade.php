@@ -3,6 +3,11 @@
 @section('content')
 
     <div class="container">
+        @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+        @endif
         <form action="/login" method="POST">
             @csrf
             <div class="mb-3">
@@ -19,13 +24,14 @@
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="form-check">
+            <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" value="" id="remember" name="remember">
                 <label class="form-check-label" for="remember">
                     Remember me
                 </label>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
+            <a href="/forgot-password" class="btn btn-secondary ">Forgot Password?</a>
         </form>
     </div>
 

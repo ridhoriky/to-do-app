@@ -27,6 +27,7 @@
                 @enderror
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
+            <p>Already have an account? <a href="/login" class="btn btn-link">Login</a></p>
         </form>
     </div>
 
