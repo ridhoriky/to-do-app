@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TasksController;
 
 /*
@@ -25,3 +26,9 @@ Route::get('/tasks/{task}', [TasksController::class, 'show']);
 Route::get('/tasks/{task}/edit', [TasksController::class, 'edit']);
 Route::put('/tasks/{task}', [TasksController::class, 'update']);
 Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
+
+Route::get('/register',[AuthController::class, 'registerForm']);
+Route::post('/register',[AuthController::class, 'register']);
+Route::get('/login',[AuthController::class, 'loginForm']);
+Route::post('/login',[AuthController::class, 'login']);
+Route::post('/logout',[AuthController::class, 'logout']);

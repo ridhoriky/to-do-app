@@ -3,6 +3,10 @@
 @section('content')
 
     <div class="container">
+        @auth
+            <h1>Welcome, {{ auth()->user()->name }}</h1>
+        @endauth
+
         <a href="/tasks/create" class="btn btn-primary my-3">Create Task</a>
         <form action="/tasks" method="GET">
             <div class="input-group mb-3">
@@ -26,12 +30,14 @@
                     <td>
                         <div class="d-flex gap-2">
                             <a href="/tasks/{{ $task->id }}" class="btn btn-primary">Detail</a>
+                            @auth 
                             <a href="/tasks/{{ $task->id }}/edit" class="btn btn-warning">Edit</a>
                             <form onsubmit="return confirm('Are you sure?')" action="/tasks/{{ $task->id }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button  class="btn btn-danger" type="submit">Delete</button>
                             </form>
+                            @endauth
                         </div>
                     </td>
                 </tr>

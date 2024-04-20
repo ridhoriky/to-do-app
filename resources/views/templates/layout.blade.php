@@ -17,6 +17,16 @@
             <ul class="nav nav-pills">
                 <li class="nav-item"><a href="/tasks" class="nav-link active" aria-current="page">Home</a></li>
                 <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                @guest
+                <li class="nav-item"><a href="/login" class="nav-link px-2 text-body-secondary">Login</a></li>
+                <li class="nav-item"><a href="/register" class="nav-link px-2 text-body-secondary">Register</a></li>
+                @endguest
+                @auth
+                  <form action="/logout" method="POST">
+                      @csrf
+                      <button type="submit" class="btn btn-danger">Logout</button>
+                  </form>
+                @endauth
             </ul>
         </header>
     </div>
@@ -34,6 +44,7 @@
           <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a href="/tasks" class="nav-link px-2 text-body-secondary">Home</a></li>
             <li class="nav-item"><a href="/about" class="nav-link px-2 text-body-secondary">About</a></li>
+            
           </ul>
         </footer>
       </div>
