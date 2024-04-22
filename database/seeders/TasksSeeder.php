@@ -14,14 +14,12 @@ class TasksSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create('id_ID');
+        $faker = Faker::create("id_ID");
 
         for ($i = 0; $i < 10; $i++) {
-
-            DB::table('tasks')->insert([
-                'item' => $faker->sentence(),
+            DB::table("tasks")->insert([
+                "item" => $faker->sentence(),
             ]);
         }
-
     }
 }
