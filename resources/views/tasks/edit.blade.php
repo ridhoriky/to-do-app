@@ -9,6 +9,8 @@
             <div class="mb-3">
                 <label for="item" class="form-label " >Task</label>
                 <input type="text" class="form-control" id="item" name="item" value="{{ $task->item }}">
+                <label for="item" class="form-label">Status</label>
+                <input type="text" class="form-control" id="status" name="status" value="{{ $task->status }}">
                 @error('item')
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror

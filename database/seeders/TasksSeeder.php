@@ -18,7 +18,10 @@ class TasksSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
             DB::table("tasks")->insert([
-                "item" => $faker->sentence(),
+                "item" => $faker->text(5),
+                "status" => $faker->text(10),
+                "created_at" => now(),
+                "updated_at" => now(),
             ]);
         }
     }
