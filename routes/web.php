@@ -115,3 +115,18 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
  
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/member', function () {
+    return 'member page';
+})->middleware(['auth', 'role:member']);
+
+Route::get('/admin', function () {
+    return 'admin page';
+})->middleware(['auth', 'role:admin']);
+
+Route::get('/giveRole/{id}', function ($id) {
+    $user = User::find($id);
+    $user->assignRole('admin');
+    return 'done';
+});
+
