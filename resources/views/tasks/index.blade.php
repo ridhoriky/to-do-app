@@ -20,8 +20,9 @@
             <thead>
                 <tr >
                     <th scope="col" class="col-1">No</th>
-                    <th scope="col" class="col-7">Task</th>
+                    <th scope="col" class="col-5">Task</th>
                     <th scope="col" class="col-2">Status</th>
+                    <th scope="col" class="col-2">Image</th>
                     <th scope="col" class="col-2" >Action</th>
                 </tr>
             </thead>
@@ -31,6 +32,7 @@
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td> {{ $task->item }}</td>
                     <td>{{ $task->status }}</td>
+                    <td><img src="{{ asset('storage/' . $task->image_path) }}" alt="" width="100"></td>
                     <td>
                         <div class="d-flex gap-2">
                             <a href="/tasks/{{ $task->id }}" class="btn btn-primary">Detail</a>

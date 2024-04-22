@@ -41,9 +41,12 @@ class TasksController extends Controller
         //     'item'=> $validated['item']
         // ]);
 
+        $imagePath = $request->file("image")->store("images");
+
         $task = new Task();
         $task->item = $validated["item"];
         $task->status = $validated["status"];
+        $task->image_path = $imagePath;
         $task->save();
 
         return redirect("/tasks");
@@ -78,9 +81,13 @@ class TasksController extends Controller
         //     ->update([
         //         "item" => $validated["item"],
         //     ]);
+
+        $imagePath = $request->file("image")->store("images");
+
         $task = Task::find($id);
         $task->item = $validated["item"];
         $task->status = $validated["status"];
+        $task->image_path = $imagePath;
         $task->save();
 
         return redirect("/tasks/" . $id);
