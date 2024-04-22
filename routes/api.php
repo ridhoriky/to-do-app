@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TaskController;
+use App\Http\Controllers\API\LoginController;
+use App\Http\Controllers\API\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +21,6 @@ Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource("/tasks", TaskController::class);
+Route::apiResource("/tasks", TaskController::class)->middleware("auth:sanctum");
+Route::post("/register", RegisterController::class)->middleware("guest");
+Route::post("/login", LoginController::class)->middleware("guest");
