@@ -2,12 +2,16 @@
 
 use App\Models\User;
 use App\Mail\TestMail;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\TasksController;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,19 +28,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/tasks', [TasksController::class, 'index'])->middleware('auth');
-Route::get('/tasks/create', [TasksController::class, 'create']);
-Route::post('/tasks', [TasksController::class, 'store']);
-Route::get('/tasks/{task}', [TasksController::class, 'show']);
-Route::get('/tasks/{task}/edit', [TasksController::class, 'edit']);
-Route::put('/tasks/{task}', [TasksController::class, 'update']);
-Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
+Route::get('/tasks', [TasksController::class, 'index'])->middleware(['auth', 'verified']);
+Route::get('/tasks/create', [TasksController::class, 'create'])->middleware(['auth', 'verified']);
+Route::post('/tasks', [TasksController::class, 'store'])->middleware(['auth', 'verified']);
+Route::get('/tasks/{task}', [TasksController::class, 'show'])->middleware(['auth', 'verified']);
+Route::get('/tasks/{task}/edit', [TasksController::class, 'edit'])->middleware(['auth', 'verified']);
+Route::put('/tasks/{task}', [TasksController::class, 'update'])->middleware(['auth', 'verified']);
+Route::delete('/tasks/{task}', [TasksController::class, 'destroy'])->middleware(['auth', 'verified']);
 
 Route::get('/register',[AuthController::class, 'registerForm'])->middleware('guest');
 Route::post('/register',[AuthController::class, 'register']);
 Route::get('/login',[AuthController::class, 'loginForm'])->name ('login')-> middleware('guest');
 Route::post('/login',[AuthController::class, 'login']);
 Route::post('/logout',[AuthController::class, 'logout']);
+
+Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified']);
 
 Route::get('/test_mail', function () {
     $name = 'Test';
@@ -94,3 +100,18 @@ Route::post('/reset-password', function (Request $request) {
                 ? redirect()->route('login')->with('status', __($status))
                 : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+ 
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+ 
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');

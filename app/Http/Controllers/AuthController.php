@@ -28,7 +28,9 @@ class AuthController extends Controller
         'password' => Hash::make($validated['password']),
     ]);
 
-    return redirect('/tasks');
+    $user = DB::table('users')->where('email', $validated['email'])->first();
+    Auth::loginUsingId($user->id);
+    return redirect('/email/verify/');
     }
     
     public function loginForm()
