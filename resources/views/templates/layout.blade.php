@@ -37,9 +37,12 @@
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
           <p class="col-md-4 mb-0 text-body-secondary">© 2024 Learn Laravel, Inc</p>
       
-          <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-          </a>
+          <div class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <a href="/change-lang/en" class="nav-link px-2 text-body-secondary">English</a>
+            <a href="/change-lang/id" class="nav-link px-2 text-body-secondary">Indonesia</a>
+          </div>
+
+          
       
           <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a href="/tasks" class="nav-link px-2 text-body-secondary">Home</a></li>

@@ -4,7 +4,7 @@
 
     <div class="container">
         @auth
-            <h1>Welcome, {{ auth()->user()->name }}</h1>
+            <h1>{{ __('message.welcome') }} {{ auth()->user()->name }}</h1>
             @role('member')
             <a href="/tasks/create" class="btn btn-primary my-3">Create Task</a>
             @endrole

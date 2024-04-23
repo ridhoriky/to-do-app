@@ -24,109 +24,167 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get("/", function () {
+    return view("welcome");
 });
 
-Route::get('/tasks', [TasksController::class, 'index'])->middleware(['auth', 'verified']);
-Route::get('/tasks/create', [TasksController::class, 'create'])->middleware(['auth', 'verified']);
-Route::post('/tasks', [TasksController::class, 'store'])->middleware(['auth', 'verified']);
-Route::get('/tasks/{task}', [TasksController::class, 'show'])->middleware(['auth', 'verified']);
-Route::get('/tasks/{task}/edit', [TasksController::class, 'edit'])->middleware(['auth', 'verified']);
-Route::put('/tasks/{task}', [TasksController::class, 'update'])->middleware(['auth', 'verified']);
-Route::delete('/tasks/{task}', [TasksController::class, 'destroy'])->middleware(['auth', 'verified']);
+Route::get("/tasks", [TasksController::class, "index"])->middleware([
+    "auth",
+    "verified",
+]);
+Route::get("/tasks/create", [TasksController::class, "create"])->middleware([
+    "auth",
+    "verified",
+]);
+Route::post("/tasks", [TasksController::class, "store"])->middleware([
+    "auth",
+    "verified",
+]);
+Route::get("/tasks/{task}", [TasksController::class, "show"])->middleware([
+    "auth",
+    "verified",
+]);
+Route::get("/tasks/{task}/edit", [TasksController::class, "edit"])->middleware([
+    "auth",
+    "verified",
+]);
+Route::put("/tasks/{task}", [TasksController::class, "update"])->middleware([
+    "auth",
+    "verified",
+]);
+Route::delete("/tasks/{task}", [TasksController::class, "destroy"])->middleware(
+    ["auth", "verified"]
+);
 
-Route::get('/register',[AuthController::class, 'registerForm'])->middleware('guest');
-Route::post('/register',[AuthController::class, 'register']);
-Route::get('/login',[AuthController::class, 'loginForm'])->name ('login')-> middleware('guest');
-Route::post('/login',[AuthController::class, 'login']);
-Route::post('/logout',[AuthController::class, 'logout']);
+Route::get("/register", [AuthController::class, "registerForm"])->middleware(
+    "guest"
+);
+Route::post("/register", [AuthController::class, "register"]);
+Route::get("/login", [AuthController::class, "loginForm"])
+    ->name("login")
+    ->middleware("guest");
+Route::post("/login", [AuthController::class, "login"]);
+Route::post("/logout", [AuthController::class, "logout"]);
 
-Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified']);
+Route::get("/home", [HomeController::class, "index"])->middleware([
+    "auth",
+    "verified",
+]);
 
-Route::get('/test_mail', function () {
-    $name = 'Test';
+Route::get("/test_mail", function () {
+    $name = "Test";
     $age = 10;
 
-    Mail::to('test@test.com')->send(new TestMail ($name, $age));
-    return 'email sent';
+    Mail::to("test@test.com")->send(new TestMail($name, $age));
+    return "email sent";
 });
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
+Route::get("/forgot-password", function () {
+    return view("auth.forgot-password");
+})
+    ->middleware("guest")
+    ->name("password.request");
 
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
- 
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
- 
+Route::post("/forgot-password", function (Request $request) {
+    $request->validate(["email" => "required|email"]);
+
+    $status = Password::sendResetLink($request->only("email"));
+
     return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
+        ? back()->with(["status" => __($status)])
+        : back()->withErrors(["email" => __($status)]);
+})
+    ->middleware("guest")
+    ->name("password.email");
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+Route::get("/reset-password/{token}", function ($token) {
+    return view("auth.reset-password", ["token" => $token]);
+})
+    ->middleware("guest")
+    ->name("password.reset");
 
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+Route::get("/reset-password/{token}", function (string $token) {
+    return view("auth.reset-password", ["token" => $token]);
+})
+    ->middleware("guest")
+    ->name("password.reset");
 
-Route::post('/reset-password', function (Request $request) {
+Route::post("/reset-password", function (Request $request) {
     $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
+        "token" => "required",
+        "email" => "required|email",
+        "password" => "required|min:8|confirmed",
     ]);
- 
+
     $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
+        $request->only("email", "password", "password_confirmation", "token"),
         function (User $user, string $password) {
-            $user->forceFill([
-                'password' => Hash::make($password)
-            ])->setRememberToken(Str::random(60));
- 
+            $user
+                ->forceFill([
+                    "password" => Hash::make($password),
+                ])
+                ->setRememberToken(Str::random(60));
+
             $user->save();
- 
+
             event(new PasswordReset($user));
         }
     );
- 
+
     return $status === Password::PASSWORD_RESET
-                ? redirect()->route('login')->with('status', __($status))
-                : back()->withErrors(['email' => [__($status)]]);
-})->middleware('guest')->name('password.update');
+        ? redirect()
+            ->route("login")
+            ->with("status", __($status))
+        : back()->withErrors(["email" => [__($status)]]);
+})
+    ->middleware("guest")
+    ->name("password.update");
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get("/email/verify", function () {
+    return view("auth.verify-email");
+})
+    ->middleware("auth")
+    ->name("verification.notice");
 
-Route::post('/email/verification-notification', function (Request $request) {
+Route::post("/email/verification-notification", function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
- 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    return back()->with("message", "Verification link sent!");
+})
+    ->middleware(["auth", "throttle:6,1"])
+    ->name("verification.send");
+
+Route::get("/email/verify/{id}/{hash}", function (
+    EmailVerificationRequest $request
+) {
     $request->fulfill();
- 
-    return redirect('/home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::get('/member', function () {
-    return 'member page';
-})->middleware(['auth', 'role:member']);
+    return redirect("/home");
+})
+    ->middleware(["auth", "signed"])
+    ->name("verification.verify");
 
-Route::get('/admin', function () {
-    return 'admin page';
-})->middleware(['auth', 'role:admin']);
+Route::get("/member", function () {
+    return "member page";
+})->middleware(["auth", "role:member"]);
 
-Route::get('/giveRole/{id}', function ($id) {
+Route::get("/admin", function () {
+    return "admin page";
+})->middleware(["auth", "role:admin"]);
+
+Route::get("/giveRole/{id}", function ($id) {
     $user = User::find($id);
-    $user->assignRole('admin');
-    return 'done';
+    $user->assignRole("admin");
+    return "done";
 });
 
+Route::get("/change-lang/{locale}", function (string $locale) {
+    if (!in_array($locale, ["en", "id"])) {
+        abort(400);
+    }
+
+    App::setLocale($locale);
+
+    session()->put("locale", $locale);
+
+    return redirect()->back();
+});
